@@ -1,13 +1,13 @@
 let url = `http://localhost:3000/api/products`;
-const newUrl = new URL(location.href);
-const id = newUrl.searchParams.get("/_id");
+const newUrl = new URL(window.location.href);
+const getId = newUrl.searchParams.get("id");
 
 
-// fetch(url)    
-//     .then((data) => data.json().then((data)=> console.log(data)));
+ fetch(url + getId)    
+     .then((data) => data.json().then((data)=> console.log(data)));
 
-function getProduct(id) {
-    fetch(newUrl + id)
+function getProduct(getId) {
+    fetch(newUrl + getId)
     .then(data => data.json)
     .then ((data) => {
         let name= data.name;
@@ -18,11 +18,11 @@ function getProduct(id) {
         let price = data.price /10;
         let id = data._id; 
         
-        document.querySelector('.item__image') += imageUrl;
-        document.querySelector('#title') += name;
-        document.querySelector('#price') += price;
-        document.querySelector('#description') += description;
-        document.querySelector('#title') += name;
+        document.querySelector('.item__img').innerHTML += imageUrl;
+        document.querySelector('#title').innerHTML += name;
+        document.querySelector('#price').innerHTML += price;
+        document.querySelector('#description').innerHTML += description;
+        document.querySelector('#title').innerHTML += name;
     
         for (choice in colors){
 
