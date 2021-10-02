@@ -1,13 +1,16 @@
-let url = `http://localhost:3000/api/products`;
+//Déclaration des variables
+let url = `http://localhost:3000/api/products/`;
 const newUrl = new URL(window.location.href);
+//Récupération de l'id
 const getId = newUrl.searchParams.get("id");
+console.log(getId);
+console.log(newUrl);
 
-
- fetch(url + getId)    
+ fetch(url + "id")    
      .then((data) => data.json().then((data)=> console.log(data)));
 
 function getProduct(getId) {
-    fetch(newUrl + getId)
+    fetch(url + "id")
     .then(data => data.json)
     .then ((data) => {
         let name= data.name;
@@ -30,4 +33,4 @@ function getProduct(getId) {
     
     })}
 
-    getProduct()
+    getProduct(getId)

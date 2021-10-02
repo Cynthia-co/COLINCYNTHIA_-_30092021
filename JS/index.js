@@ -1,5 +1,7 @@
+//Déclaration en variable de l'url de l'API
 let url = `http://localhost:3000/api/products`;
 
+//Récupération des données de l'API
 function getProducts(){
     fetch(url)    
     .then((data) =>
@@ -23,7 +25,8 @@ function getProducts(){
                 <p>Prix : ${price}</p>
                 </article>
             </a> `
-
+        
+            //Affichage en dynamique des produits
           document.querySelector('.items').innerHTML += items
         }
     }
