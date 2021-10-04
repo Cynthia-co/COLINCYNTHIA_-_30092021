@@ -17,7 +17,7 @@ function getProducts(){
             let id = data[i]._id;
 
             let items = 
-            `<a href="./product.html?id=${id}">
+            `<a href="../html/product.html?id=${id}">
                 <article>
                 <img src="${imageUrl}" alt="${altTxt}">
                 <h3 class="productName">${name}</h3>
