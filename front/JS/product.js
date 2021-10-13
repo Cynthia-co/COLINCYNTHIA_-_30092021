@@ -40,18 +40,18 @@ getProduct(getId);
 
 
 //Ajout au panier
-//Déclaration de constantes
- const nameKanap = document.getElementById("title").innerText;
- const imageUrl = document.getElementsByClassName("item__img").innerText;
-const price = document.getElementById("price").innerText;
- const quantity = document.getElementById("quantity").innerText;
- const colorsOption = document.getElementsByName("option").innerText;
+
 
 //let panier = JSON.parse(localStorage.getItem())
 
 document.querySelector("#addToCart").addEventListener("click", (event) => {
  event.preventDefault()
-
+//Déclaration de constantes
+const nameKanap = document.getElementById("title").innerText;
+const imageUrl = document.getElementsByClassName("item__img").innerText;
+const price = document.getElementById("price").innerText;
+const quantity = document.getElementById("quantity").value;
+const colorsOption = document.getElementsByTagName("option").value;
     //Création de l'objet à rajouter au panier
     let article = {
       getId, 
@@ -59,6 +59,7 @@ document.querySelector("#addToCart").addEventListener("click", (event) => {
       imageUrl, 
       quantity,
       price,
+      colorsOption,
     }
     console.log(article);
   // localStorage.getItem(panier);

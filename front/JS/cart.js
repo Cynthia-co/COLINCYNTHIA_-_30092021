@@ -43,16 +43,15 @@ form.lastName.addEventListener('change', function(){
     validName(this);
 });
 
-const validName = function(inputName){
-    let nameRegExp = new RegExp( "^([a-zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zàáâäçèéêëìíîïñòóôöùúûü]+)*)+([-]([a-zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zàáâäçèéêëìíîïñòóôöùúûü]+)*)+)*$", "g");
-}
-let testName = validName.test(inputName);
-console.log(testName);
+// const validName = function(inputName){
+//     let nameRegExp = new RegExp( "^([a-zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zàáâäçèéêëìíîïñòóôöùúûü]+)*)+([-]([a-zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zàáâäçèéêëìíîïñòóôöùúûü]+)*)+)*$", "g");
+// }
+// let testName = validName.test(inputName);
+
 
 const validName = function(inputEmail){
     let nameRegExp = new RegExp('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$', 'g');
     let testName = nameRegExp.test(inputName);
-        console.log(testName);
 
     if(testName){
         return true;
@@ -77,6 +76,14 @@ form.city.addEventListener('change', function(){
     validCity(this);
 });
 
+let validCity = function(inputCity){
+    if(inputCity.value.length < 3){
+        inputCity.nextElementSibling.innerHTML = "Saisissez votre ville"
+    }else{
+        return true;
+    };
+};
+
 form.email.addEventListener('change', function() {
     validEmail(this);
 });
@@ -95,8 +102,20 @@ const validEmail = function(inputEmail){
     }
 };
 
+
+let contact = {
+    lastName : form.lastName.value,
+    firstName : form.firstName.value,
+    address : form.address.value,
+    city : form.city.value,
+    email : form.email.value,
+};
+
 //Soumission du formulaire
-// form.addEventListener('submit', function(e){
-//     e.preventDefault();
-//     if (validName(form.name) && validAdress(form.address) && validCity(form.city) && validEmail(form.Email))
-// })
+ form.addEventListener('submit', function(e){
+     e.preventDefault();
+     if (validName(form.name) && validAdress(form.address) && validCity(form.city) && validEmail(form.Email)){
+    
+    localStorage.setItem(contact)
+    }
+});
