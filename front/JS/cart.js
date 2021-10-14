@@ -1,35 +1,40 @@
-// let produitLocalStorage = JSON.parse(localStorage.getItem('produitEnregistre'));
-// console.log(produitLocalStorage);
-// //Affichage des éléments du local storage
-// //Déclaration des variables
-// let totalPrice = quantity * price;
+ let produitLocalStorage = JSON.parse(localStorage.getItem('article'));
+console.log(produitLocalStorage);
+ //Affichage des éléments du local storage
+ //Déclaration des variables
+//let totalPrice = quantity * price;
 
 
-// if(produitLocalStorage === 0){
-//     document.querySelector(".cart__item").innerHTML = "Le panier est vide"
-// }else{
-//     let produitPanier = `<article class="cart__item" data-id="${id}">
-//     <div class="cart__item__img">
-//       <img src="${imageUrl}" alt="Photographie d'un canapé">
-//     </div>
-//     <div class="cart__item__content">
-//       <div class="cart__item__content__titlePrice">
-//         <h2>${nameKanap}</h2>
-//         <p>${totalPrice} €</p>
-//       </div>
-//       <div class="cart__item__content__settings">
-//         <div class="cart__item__content__settings__quantity">
-//           <p>Qté : ${quantity} </p>
-//           <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="42">
-//         </div>
-//         <div class="cart__item__content__settings__delete">
-//           <p class="deleteItem">Supprimer</p>
-//         </div>
-//       </div>
-//     </div>
-//     </article>`
-// }
+ if(produitLocalStorage === 0){
+     document.querySelector(".cart__item").innerHTML = "Le panier est vide"
+ }else{
 
+    for (j=0; j<produitLocalStorage.length; j++){
+        let totalPrice = '${produitLocalStorage[j].price}'*'${produitLocalStorage[j].quantity}';
+     let produitPanier = `<article class="cart__item" data-id="${produitLocalStorage[j].getId}">
+     <div class="cart__item__img">
+       <img src="${produitLocalStorage[j].image}" alt="Photographie d'un canapé">
+     </div>
+     <div class="cart__item__content">
+       <div class="cart__item__content__titlePrice">
+         <h2>${produitLocalStorage[j].nameKanap}</h2>
+         <p>${totalPrice} €</p>
+      </div>
+       <div class="cart__item__content__settings">
+         <div class="cart__item__content__settings__quantity">
+           <p>Qté : ${produitLocalStorage[j].quantity} </p>
+           <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${produitLocalStorage[j].quantity}">
+         </div>
+         <div class="cart__item__content__settings__delete">
+           <p class="deleteItem">Supprimer</p>
+        </div>
+       </div>
+     </div>
+     </article>`
+
+     document.querySelector("#cart__items").innerHTML += produitPanier;
+ }
+};
 
 //Formulaire - mise en place des RegEX pour vérifier les entrées de l'utilisateur
 let form = document.querySelector(".cart__order__form");

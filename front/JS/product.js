@@ -20,9 +20,10 @@ function getProduct(getId) {
       let price = data.price / 10;
       let id = data._id;
 
+      let image = `<img src="${imageUrl}" alt="${altTxt}"/>`
       //Insertion des données de chaque canapé sur la page Produit
       document.querySelector(".name").innerHTML = name;
-      document.querySelector(".item__img").src = imageUrl;
+      document.querySelector(".item__img").src = image;
       document.querySelector("#title").innerHTML = name;
       document.querySelector("#price").innerHTML = price;
       document.querySelector("#description").innerHTML = description;
@@ -31,7 +32,7 @@ function getProduct(getId) {
       for (value in colors) {
         document.querySelector(
           "#colors"
-        ).innerHTML += `<option value="${colors[value]}">"${colors[value]}"</option>`;
+        ).innerHTML += `<option id="colorOption" value="${colors[value]}">"${colors[value]}"</option>`;
       }
     });
 }
@@ -48,31 +49,36 @@ document.querySelector("#addToCart").addEventListener("click", (event) => {
  event.preventDefault()
 //Déclaration de constantes
 const nameKanap = document.getElementById("title").innerText;
-const imageUrl = document.getElementsByClassName("item__img").innerText;
+const imageUrl = document.getElementsByClassName("item__img").src;
 const price = document.getElementById("price").innerText;
 const quantity = document.getElementById("quantity").value;
-const colorsOption = document.getElementsByTagName("option").value;
+const colorsOption = document.getElementById("colors").value;
+
+
     //Création de l'objet à rajouter au panier
     let article = {
       getId, 
+      imageUrl,
       nameKanap,
-      imageUrl, 
       quantity,
       price,
       colorsOption,
     }
     console.log(article);
   // localStorage.getItem(panier);
-let produitLocalStorage = JSON.parse(localStorage.getItem('article'));
-console.log(produitLocalStorage);
+  let produitLocalStorage = JSON.parse(localStorage.getItem('article'));
+
+
 
 //vérifier s
 if(produitLocalStorage){
-  produitLocalStorage.push(article);
-  localStorage.setItem("produitCommande", JSON.stringify(produitLocalStorage));
-}else{
-  produitLocalStorage =[];
-  produitLocalStorage.push(article);
-  localStorage.setItem("produitCommande", JSON.stringify(produitLocalStorage));
-}    
+   produitLocalStorage.push(article);
+   localStorage.setItem("article", JSON.stringify(produitLocalStorage));
+ }else{
+   produitLocalStorage =[];
+   produitLocalStorage.push(article);
+ localStorage.setItem("article", JSON.stringify(produitLocalStorage));
+ }    
+
+
 })
