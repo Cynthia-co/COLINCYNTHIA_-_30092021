@@ -18,7 +18,7 @@ console.log(produitLocalStorage);
      <div class="cart__item__content">
        <div class="cart__item__content__titlePrice">
          <h2>${produitLocalStorage[j].nameKanap}</h2>
-         <p>${totalPrice} €</p>
+         <p>${produitLocalStorage[j].price} €</p>
       </div>
        <div class="cart__item__content__settings">
          <div class="cart__item__content__settings__quantity">
