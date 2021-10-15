@@ -20,14 +20,14 @@ function getProduct(getId) {
       let price = data.price / 10;
       let id = data._id;
 
-      let image = `<img src="${imageUrl}" alt="${altTxt}"/>`
+      let image = `<img src="${imageUrl}" alt="${altTxt}" id="imageKanap"/>`
       //Insertion des données de chaque canapé sur la page Produit
       document.querySelector(".name").innerHTML = name;
-      document.querySelector(".item__img").src = image;
+      document.querySelector(".item__img").innerHTML += image;
       document.querySelector("#title").innerHTML = name;
       document.querySelector("#price").innerHTML = price;
       document.querySelector("#description").innerHTML = description;
-
+      
       //Boucle for for in pour récupérer toutes les options couleurs et les injecter au document avec un innerHTML
       for (value in colors) {
         document.querySelector(
@@ -49,7 +49,7 @@ document.querySelector("#addToCart").addEventListener("click", (event) => {
  event.preventDefault()
 //Déclaration de constantes
 const nameKanap = document.getElementById("title").innerText;
-const imageUrl = document.getElementsByClassName("item__img").src;
+//const imageUrl = document.getElementsById("imageKanap").src;
 const price = document.getElementById("price").innerText;
 const quantity = document.getElementById("quantity").value;
 const colorsOption = document.getElementById("colors").value;
@@ -58,7 +58,7 @@ const colorsOption = document.getElementById("colors").value;
     //Création de l'objet à rajouter au panier
     let article = {
       getId, 
-      imageUrl,
+     
       nameKanap,
       quantity,
       price,
@@ -67,8 +67,6 @@ const colorsOption = document.getElementById("colors").value;
     console.log(article);
   // localStorage.getItem(panier);
   let produitLocalStorage = JSON.parse(localStorage.getItem('article'));
-
-
 
 //vérifier s
 if(produitLocalStorage){
@@ -79,6 +77,4 @@ if(produitLocalStorage){
    produitLocalStorage.push(article);
  localStorage.setItem("article", JSON.stringify(produitLocalStorage));
  }    
-
-
-})
+});

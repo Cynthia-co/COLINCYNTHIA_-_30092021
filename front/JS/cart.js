@@ -1,28 +1,29 @@
- let produitLocalStorage = JSON.parse(localStorage.getItem('article'));
+ //Récupération des produits du localStorage
+let produitLocalStorage = JSON.parse(localStorage.getItem('article'));
 console.log(produitLocalStorage);
+
  //Affichage des éléments du local storage
- //Déclaration des variables
-//let totalPrice = quantity * price;
-
-
  if(produitLocalStorage === 0){
-     document.querySelector(".cart__item").innerHTML = "Le panier est vide"
+     document.querySelector(".cart__item").innerHTML = "Le panier est vide";
  }else{
-
     for (j=0; j<produitLocalStorage.length; j++){
-        let totalPrice = '${produitLocalStorage[j].price}'*'${produitLocalStorage[j].quantity}';
+     let priceUnit = Number(produitLocalStorage[j].price);
+     let quantityUnit = Number(produitLocalStorage[j].quantity);
+     let partielPrice = priceUnit * quantityUnit;
+     console.log(partielPrice);
+     
      let produitPanier = `<article class="cart__item" data-id="${produitLocalStorage[j].getId}">
      <div class="cart__item__img">
-       <img src="${produitLocalStorage[j].image}" alt="Photographie d'un canapé">
+       <img src="${produitLocalStorage[j].imageUrl}" alt="Photographie d'un canapé">
      </div>
      <div class="cart__item__content">
        <div class="cart__item__content__titlePrice">
-         <h2>${produitLocalStorage[j].nameKanap}</h2>
-         <p>${produitLocalStorage[j].price} €</p>
+         <h2>${produitLocalStorage[j].nameKanap} - ${produitLocalStorage[j].colorsOption}</h2>
+         <p>${partielPrice} €</p>
       </div>
        <div class="cart__item__content__settings">
          <div class="cart__item__content__settings__quantity">
-           <p>Qté : ${produitLocalStorage[j].quantity} </p>
+           <p>Qté :  </p>
            <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${produitLocalStorage[j].quantity}">
          </div>
          <div class="cart__item__content__settings__delete">
@@ -35,6 +36,15 @@ console.log(produitLocalStorage);
      document.querySelector("#cart__items").innerHTML += produitPanier;
  }
 };
+// Somme de nombre d'articles dans le panier
+let totalArticles = Math.round(document.querySelector(".itemQuantity").value);
+console.log(totalArticles);
+
+document.querySelector("#totalQuantity").innerHTML += totalArticles;
+
+// Somme du prix total
+//let totalPrice
+document.querySelector("#totalPrice").innerHTML += totalPrice;
 
 //Formulaire - mise en place des RegEX pour vérifier les entrées de l'utilisateur
 let form = document.querySelector(".cart__order__form");
@@ -94,10 +104,9 @@ form.email.addEventListener('change', function() {
 });
 
 const validEmail = function(inputEmail){
-    let emailRegExp = new RegExp('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$', 'g');
+    let emailRegExp = new RegExp("^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$", "g");
     let testEmail = emailRegExp.test(inputEmail);
         console.log(testEmail);
-
     if(testEmail){
         inputEmail.nextElementSibling.innerHTML = 'Adresse valide';
         return true;
@@ -124,3 +133,5 @@ let contact = {
     localStorage.setItem(contact)
     }
 });
+
+//Requête POST
