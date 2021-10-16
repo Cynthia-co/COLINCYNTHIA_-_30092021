@@ -68,6 +68,11 @@ const colorsOption = document.getElementById("colors").value;
   // localStorage.getItem(panier);
   let produitLocalStorage = JSON.parse(localStorage.getItem('article'));
 
+for(k=0; k<article.length; k++){
+  if(article.getId === article[k].getId && article.colorsOption === article[k].colorsOption){
+    article.quantity
+  }
+};
 //vérifier s
 if(produitLocalStorage){
    produitLocalStorage.push(article);

@@ -4,7 +4,7 @@ console.log(produitLocalStorage);
 
  //Affichage des éléments du local storage
  if(produitLocalStorage === 0){
-     document.querySelector(".cart__item").innerHTML = "Le panier est vide";
+     document.querySelector(".cart__item").innerHTML = `<p>Le panier est vide<p>`;
  }else{
     for (j=0; j<produitLocalStorage.length; j++){
      let priceUnit = Number(produitLocalStorage[j].price);
@@ -36,9 +36,21 @@ console.log(produitLocalStorage);
      document.querySelector("#cart__items").innerHTML += produitPanier;
  }
 };
+//changer la quantité du panier 
+document.querySelector(".itemQuantity").addEventListener('change', (e) => {
+    let newQuantity = this.value;
+    console.log(newQuantity);
+}
+);
 // Somme de nombre d'articles dans le panier
-let totalArticles = Math.round(document.querySelector(".itemQuantity").value);
-console.log(totalArticles);
+let totalArticles = [];
+
+// for (k=0; k=produitLocalStorage.length; k++){
+    
+//     totalArticles.push(totalQuantity);
+//     console.log(totalQuantity);
+// }
+// console.log(totalArticles);
 
 document.querySelector("#totalQuantity").innerHTML += totalArticles;
 
@@ -64,10 +76,10 @@ form.lastName.addEventListener('change', function(){
 // let testName = validName.test(inputName);
 
 
-const validName = function(inputEmail){
+const validName = function(inputName){
     let nameRegExp = new RegExp('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$', 'g');
     let testName = nameRegExp.test(inputName);
-
+    
     if(testName){
         return true;
     }else{
