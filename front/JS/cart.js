@@ -1,5 +1,5 @@
  //Récupération des produits du localStorage
-let produitLocalStorage = JSON.parse(localStorage.getItem('article'));
+let produitLocalStorage = JSON.parse(localStorage.getItem('articles'));
 console.log(produitLocalStorage);
 
  //Affichage des éléments du local storage
@@ -51,8 +51,10 @@ let totalArticles = [];
 //     console.log(totalQuantity);
 // }
 // console.log(totalArticles);
+const reducer = (accumulator, currentValue) => accumulator + currentValue;
+let quantityTotal = totalArticles.reducer(accumulator, 0);
 
-document.querySelector("#totalQuantity").innerHTML += totalArticles;
+document.querySelector("#totalQuantity").innerHTML += quantityTotal;
 
 // Somme du prix total
 //let totalPrice
@@ -128,22 +130,25 @@ const validEmail = function(inputEmail){
     }
 };
 
-
-let contact = {
-    lastName : form.lastName.value,
-    firstName : form.firstName.value,
-    address : form.address.value,
-    city : form.city.value,
-    email : form.email.value,
-};
-
-//Soumission du formulaire
- form.addEventListener('submit', function(e){
-     e.preventDefault();
-     if (validName(form.name) && validAdress(form.address) && validCity(form.city) && validEmail(form.Email)){
+//Bouton d'envoi, soumission du formulaire
+document.querySelector(".deleteItem").addEventListener('click', e =>{
+    e.preventDefault();
+    let contact = {
+        lastName : form.lastName.value,
+        firstName : form.firstName.value,
+        address : form.address.value,
+        city : form.city.value,
+        email : form.email.value,
+    };
+    let command= {
+        getId,
+        totalPrice,
+    };    
+    if (validName(form.name) && validAdress(form.address) && validCity(form.city) && validEmail(form.Email)){
     
-    localStorage.setItem(contact)
-    }
-});
+        localStorage.setItem(contact);
+        }
+})
 
 //Requête POST
+

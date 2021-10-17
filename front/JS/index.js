@@ -21,7 +21,7 @@ function getProducts() {
                 <img src="${imageUrl}" alt="${altTxt}">
                 <h3 class="productName">${name}</h3>
                 <p class="productDescription">${description}</p>
-                <p>Prix : ${price}</p>
+                <p>Prix : ${price} €</p>
                 </article>
             </a> `;
 

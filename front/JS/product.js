@@ -41,45 +41,64 @@ getProduct(getId);
 
 
 //Ajout au panier
-
-
-//let panier = JSON.parse(localStorage.getItem())
-
 document.querySelector("#addToCart").addEventListener("click", (event) => {
  event.preventDefault()
 //Déclaration de constantes
 const nameKanap = document.getElementById("title").innerText;
-//const imageUrl = document.getElementsById("imageKanap").src;
+const imageUrl = document.getElementById("imageKanap").src;
 const price = document.getElementById("price").innerText;
 const quantity = document.getElementById("quantity").value;
 const colorsOption = document.getElementById("colors").value;
 
 
     //Création de l'objet à rajouter au panier
-    let article = {
+    let articles = {
       getId, 
-     
+    imageUrl,
       nameKanap,
       quantity,
       price,
       colorsOption,
     }
-    console.log(article);
+    console.log(articles);
   // localStorage.getItem(panier);
-  let produitLocalStorage = JSON.parse(localStorage.getItem('article'));
+  let produitLocalStorage = JSON.parse(localStorage.getItem('articles')) || [];
+let found = false;
 
-for(k=0; k<article.length; k++){
-  if(article.getId === article[k].getId && article.colorsOption === article[k].colorsOption){
-    article.quantity
-  }
-};
-//vérifier s
-if(produitLocalStorage){
-   produitLocalStorage.push(article);
-   localStorage.setItem("article", JSON.stringify(produitLocalStorage));
- }else{
-   produitLocalStorage =[];
-   produitLocalStorage.push(article);
- localStorage.setItem("article", JSON.stringify(produitLocalStorage));
- }    
-});
+for (let product of produitLocalStorage){
+  if (getId === product.getId && colorsOption === product.colorsOption){
+    product.quantity =	parseInt(product.quantity) + parseInt(quantity);
+    found	=	true;
+    break;
+  }};
+  if(!found){
+    let article = {
+      getId, 
+      imageUrl,
+      nameKanap,
+      quantity,
+      price,
+      colorsOption,
+    }
+    produitLocalStorage.push(article);
+  };
+  localStorage.setItem("articles", JSON.stringify(produitLocalStorage));
+}
+);
+// for(k=0; k<articles.length; k++){
+//   if(articles.getId === articles[k].getId && articles.colorsOption === articles[k].colorsOption){
+//     articles.quantity
+//   }
+// };
+// //vérifier s
+// if(produitLocalStorage){
+//    produitLocalStorage.push(articles);
+//    localStorage.setItem("article", JSON.stringify(produitLocalStorage));
+//  }else{
+//    produitLocalStorage =[];
+//    produitLocalStorage.push(articles);
+//  localStorage.setItem("article", JSON.stringify(produitLocalStorage));
+//  }    
+// });
+
+
