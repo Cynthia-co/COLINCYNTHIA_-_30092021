@@ -19,7 +19,7 @@ console.log(produitLocalStorage);
      <div class="cart__item__content">
        <div class="cart__item__content__titlePrice">
          <h2>${produitLocalStorage[j].nameKanap} - ${produitLocalStorage[j].colorsOption}</h2>
-         <p>${partielPrice} €</p>
+         <p id="partielPrice">${partielPrice} €</p>
       </div>
        <div class="cart__item__content__settings">
          <div class="cart__item__content__settings__quantity">
@@ -31,34 +31,70 @@ console.log(produitLocalStorage);
         </div>
        </div>
      </div>
-     </article>`
+        </article>`
 
-     document.querySelector("#cart__items").innerHTML += produitPanier;
+         document.querySelector("#cart__items").innerHTML += produitPanier;
+
  }
 };
-//changer la quantité du panier 
-document.querySelector(".itemQuantity").addEventListener('change', (e) => {
-    let newQuantity = this.value;
+//Changer la quantité du panier 
+function updateQuantity(){
+ document.querySelector(".itemQuantity").addEventListener('change', (e)=>{
+    let newQuantity = Number(document.querySelector(".itemQuantity".value));
+    produitLocalStorage.quantity.push(newQuantity); 
     console.log(newQuantity);
-}
-);
+    })
+};
+updateQuantity();
+
 // Somme de nombre d'articles dans le panier
-let totalArticles = [];
 
-// for (k=0; k=produitLocalStorage.length; k++){
-    
-//     totalArticles.push(totalQuantity);
-//     console.log(totalQuantity);
+// for articles in produitLocalStorage{
+//     const newQuantity = articles.quantity;
+//     const unitPrice =articles.price;
+//     totalPrice = parseInt(unitPrice) * parseInt(newQuantity); 
 // }
-// console.log(totalArticles);
-const reducer = (accumulator, currentValue) => accumulator + currentValue;
-let quantityTotal = totalArticles.reducer(accumulator, 0);
+// console.log(newQuantity);
 
-document.querySelector("#totalQuantity").innerHTML += quantityTotal;
+
+//  for (k=0; k=produitLocalStorage.quantity; k++){
+//     let totalArticles = [];
+//      totalArticles.push(totalQuantity);
+//      console.log(totalQuantity);
+     
+//      console.log(totalArticles);
+//  }
+
+
+// let quantityTotal = 
+
+// document.querySelector("#totalQuantity").innerHTML += quantityTotal;
 
 // Somme du prix total
 //let totalPrice
-document.querySelector("#totalPrice").innerHTML += totalPrice;
+function sumPrice(){
+    let totalPrice =[];
+    for (k=0; k<produitLocalStorage.length; k++){
+        let priceUnit = Number(produitLocalStorage[k].price);
+        let quantityUnit = Number(produitLocalStorage[k].quantity);
+        let partielPrice = priceUnit * quantityUnit;
+        let numberArticles = Number(produitLocalStorage.length) * quantityUnit; 
+        let totalPrice = partielPrice * quantityUnit;
+        console.log(numberArticles);
+    document.querySelector("#totalPrice").innerHTML += totalPrice;
+};
+}
+
+
+//Supprimer l'article du panier
+// document.querySelector(".deleteItem").addEventListener("click", e =>{
+//     let articlePanier = document.querySelector(".cart__item");
+//     function deleteItem("articlePanier"){
+//         articles.splice
+//         alert("Votre article a bien été supprimé")
+//     };
+// });
+
 
 //Formulaire - mise en place des RegEX pour vérifier les entrées de l'utilisateur
 let form = document.querySelector(".cart__order__form");
@@ -131,24 +167,24 @@ const validEmail = function(inputEmail){
 };
 
 //Bouton d'envoi, soumission du formulaire
-document.querySelector(".deleteItem").addEventListener('click', e =>{
-    e.preventDefault();
-    let contact = {
-        lastName : form.lastName.value,
-        firstName : form.firstName.value,
-        address : form.address.value,
-        city : form.city.value,
-        email : form.email.value,
-    };
-    let command= {
-        getId,
-        totalPrice,
-    };    
-    if (validName(form.name) && validAdress(form.address) && validCity(form.city) && validEmail(form.Email)){
+// document.querySelector(".deleteItem").addEventListener('click', e =>{
+//     e.preventDefault();
+//     let contact = {
+//         lastName : form.lastName.value,
+//         firstName : form.firstName.value,
+//         address : form.address.value,
+//         city : form.city.value,
+//         email : form.email.value,
+//     };
+//     let command= {
+//         getId,
+//         totalPrice,
+//     };    
+//     if (validName(form.name) && validAdress(form.address) && validCity(form.city) && validEmail(form.Email)){
     
-        localStorage.setItem(contact);
-        }
-})
+//         localStorage.setItem(contact);
+//         }
+// })
 
 //Requête POST
 

@@ -40,7 +40,7 @@ function getProduct(getId) {
 getProduct(getId);
 
 
-//Ajout au panier
+//Ajout au panier --- Ecoute du bouton 
 document.querySelector("#addToCart").addEventListener("click", (event) => {
  event.preventDefault()
 //Déclaration de constantes
@@ -51,26 +51,29 @@ const quantity = document.getElementById("quantity").value;
 const colorsOption = document.getElementById("colors").value;
 
 
-    //Création de l'objet à rajouter au panier
-    let articles = {
-      getId, 
+//Création de l'objet à rajouter au panier
+  let articles = {
+    getId, 
     imageUrl,
-      nameKanap,
-      quantity,
-      price,
-      colorsOption,
-    }
+    nameKanap,
+    quantity,
+    price,
+    colorsOption,
+  }
     console.log(articles);
-  // localStorage.getItem(panier);
-  let produitLocalStorage = JSON.parse(localStorage.getItem('articles')) || [];
+
+//Envoie des articles au local storage sous forme de tableau
+let produitLocalStorage = JSON.parse(localStorage.getItem('articles')) || [];
 let found = false;
 
+//Création de la boucle for pour récupérer les articles sans faire de doublons
 for (let product of produitLocalStorage){
   if (getId === product.getId && colorsOption === product.colorsOption){
     product.quantity =	parseInt(product.quantity) + parseInt(quantity);
     found	=	true;
     break;
   }};
+
   if(!found){
     let article = {
       getId, 
@@ -81,24 +84,9 @@ for (let product of produitLocalStorage){
       colorsOption,
     }
     produitLocalStorage.push(article);
+    alert("Vos articles ont bien été ajouté au panier!")
   };
+
   localStorage.setItem("articles", JSON.stringify(produitLocalStorage));
 }
 );
-// for(k=0; k<articles.length; k++){
-//   if(articles.getId === articles[k].getId && articles.colorsOption === articles[k].colorsOption){
-//     articles.quantity
-//   }
-// };
-// //vérifier s
-// if(produitLocalStorage){
-//    produitLocalStorage.push(articles);
-//    localStorage.setItem("article", JSON.stringify(produitLocalStorage));
-//  }else{
-//    produitLocalStorage =[];
-//    produitLocalStorage.push(articles);
-//  localStorage.setItem("article", JSON.stringify(produitLocalStorage));
-//  }    
-// });
-
-
