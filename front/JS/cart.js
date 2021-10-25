@@ -63,14 +63,13 @@ document.querySelector("#totalPrice").innerHTML += totalPrice;
 // };
 
 //Supprimer l'article du panier
-let item = document.querySelectorAll(".cart__item");
+let items = document.querySelectorAll(".cart__item");
 let deleteItem = document.querySelectorAll("#deleteItem"); 
-let items = [];
-items.push(item);
-console.log(item);
-console.log(items);
+let arrayItems = Array.from(items);
+
+console.log(arrayItems);
 //function deleteArticle() {
-for (l=0; l<item[l].length; l++){
+for (l=0; l<item.length; l++){
     // let deleteButton = document.querySelectorAll(".deleteItem");
        // console.log(deleteButton);
        console.log('Bonjour');
