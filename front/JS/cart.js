@@ -53,29 +53,36 @@ document.querySelector("#totalPrice").innerHTML += totalPrice;
 // }
 
 //Changer la quantité du panier 
-let inputQuantity = document.querySelectorAll(".itemQuantity");
-for (m=0; m<inputQuantity.length; m++){
-    inputQuantity.addEventListener('change', function(){
-     let newQuantity = inputQuantity[m].value;
-  //   produitLocalStorage.quantity.push(newQuantity); 
-    console.log(newQuantity);
-  });
-};
-//Supprimer l'article du panier
-const item = document.querySelectorAll(".cart__item");
-const deleteItem = document.querySelectorAll("#deleteItem"); 
+// let inputQuantity = document.querySelectorAll(".itemQuantity");
+// for (m=0; m<inputQuantity.length; m++){
+//     inputQuantity.addEventListener('change', function(){
+//      let newQuantity = inputQuantity[m].value;
+//   //   produitLocalStorage.quantity.push(newQuantity); 
+//     console.log(newQuantity);
+//   });
+// };
 
-for (l=0; l<item.length; l++){
+//Supprimer l'article du panier
+let item = document.querySelectorAll(".cart__item");
+let deleteItem = document.querySelectorAll("#deleteItem"); 
+let items = [];
+items.push(item);
+console.log(item);
+console.log(items);
+//function deleteArticle() {
+for (l=0; l<item[l].length; l++){
     // let deleteButton = document.querySelectorAll(".deleteItem");
        // console.log(deleteButton);
+       console.log('Bonjour');
      deleteItem[l].addEventListener('click', (e) => {
        e.preventDefault();
-       e.stopPropagation();
-        item[l].splice(item[l],1);
-        console.log('Bonjour');
-     }
-    ) ;
-}
+      
+       console.log(item[0]);
+        localStorage.removeItem(item[l]); 
+     })
+};
+//};
+//deleteArticle();
 
 //Formulaire - mise en place des RegEX pour vérifier les entrées de l'utilisateur
 let form = document.querySelector(".cart__order__form");
