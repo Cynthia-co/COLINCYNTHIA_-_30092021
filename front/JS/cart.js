@@ -1,9 +1,10 @@
 //Récupération des produits du localStorage
 let produitLocalStorage = JSON.parse(localStorage.getItem("articles"));
 
+//Affichage des produits sur la page
+
+//Déclaration de la fonction pour l'affichage
 const displayCart = () => {
-  let prices = [];
-  let quantities = [];
   //Affichage des éléments du local storage
   if (produitLocalStorage.length === 0) {
     document.getElementById(
@@ -12,13 +13,12 @@ const displayCart = () => {
   } else {
     document.getElementById("cart__items").innerHTML = "";
     for (j = 0; j < produitLocalStorage.length; j++) {
-      let priceUnit = Number(produitLocalStorage[j].price);
-      let quantityUnit = Number(produitLocalStorage[j].quantity);
-      let partielPrice = priceUnit * quantityUnit;
-      prices.push(partielPrice);
-      quantities.push(quantityUnit);
+      const priceUnit = Number(produitLocalStorage[j].price);
+      const quantityUnit = Number(produitLocalStorage[j].quantity);
+      const partielPrice = priceUnit * quantityUnit;
 
-      let produitPanier = `<article class="cart__item" data-id="${produitLocalStorage[j].getId}" data-color=${produitLocalStorage[j].colorsOption}>
+      //Déclaration de l'article du panier
+      const produitPanier = `<article class="cart__item" id="${produitLocalStorage[j].getId}" data-color=${produitLocalStorage[j].colorsOption}>
      <div class="cart__item__img">
        <img src="${produitLocalStorage[j].imageUrl}" alt="Photographie d'un canapé">
      </div>
@@ -30,7 +30,7 @@ const displayCart = () => {
        <div class="cart__item__content__settings">
          <div class="cart__item__content__settings__quantity">
            <p>Qté :  </p>
-           <input type="number" onKeyUp="stepCalcul(event)" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${produitLocalStorage[j].quantity}">
+           <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${produitLocalStorage[j].quantity}">
          </div>
          <div class="cart__item__content__settings__delete">
            <p id="deleteItem" class="deleteItem">Supprimer</p>
@@ -39,53 +39,82 @@ const displayCart = () => {
      </div>
         </article>`;
 
-      document.querySelector("#cart__items").innerHTML += produitPanier;
+      document
+        .getElementById("cart__items")
+        .insertAdjacentHTML("beforeend", produitPanier);
+
+      inputChange(produitLocalStorage[j].getId);
+      addDeleteAction(produitLocalStorage[j].getId);
     }
   }
-
-  //Calcul du nombre total d'articles
-  let totalQuantity = quantities.reduce((acc, el) => acc + el);
-  document.querySelector("#totalQuantity").innerHTML += totalQuantity;
-
-  //Calcul du prix total
-  let totalPrice = prices.reduce((acc, el) => acc + el);
-  document.querySelector("#totalPrice").innerHTML += totalPrice;
 };
+const addDeleteAction = (id) => {
+  const deleteItem = document.getElementById(id).querySelector(".deleteItem");
+  const item = document.getElementById(id);
 
+  deleteItem.addEventListener("click", () => {
+    const idItem = item.getAttribute("id");
+    const colorItem = item.getAttribute("data-color");
 
-//Changer la quantité du panier
-// let inputQuantity = document.querySelectorAll(".itemQuantity");
-// for (m=0; m<inputQuantity.length; m++){
-//     inputQuantity.addEventListener('change', function(){
-//      let newQuantity = inputQuantity[m].value;
-//   //   produitLocalStorage.quantity.push(newQuantity);
-//     console.log(newQuantity);
-//   });
-// };
-displayCart();
-
-//Supprimer l'article du panier
-const items = document.querySelectorAll(".cart__item");
-const deleteItem = document.querySelectorAll(".deleteItem");
-const arrayItems = Array.from(items);
-
-for (let l = 0; l < items.length; l++) {
-  deleteItem[l].addEventListener("click", () => {
-    const idItem = items[l].getAttribute("data-id");
-    const colorItem = items[l].getAttribute("data-color");
-    console.log(items[l].getAttribute("data-color"));
     produitLocalStorage = produitLocalStorage.filter(
       (p) => p.getId !== idItem || p.colorsOption !== colorItem
     );
 
     localStorage.setItem("articles", JSON.stringify(produitLocalStorage));
-    
+
     displayCart();
-    
+    displayTotalPrice();
+    displayTotalQuantity();
   });
-}
+};
 
 
+//Changer la quantité du panier
+const inputChange = (id) => {
+  const input = document.getElementById(id).querySelector(".itemQuantity");
+  input.addEventListener("input", (e) => {
+    console.log(e);
+  });
+};
+
+const displayTotalPrice = () => {
+  const storage = localStorage.getItem("articles");
+  if (storage) {
+    const product = JSON.parse(storage);
+    const totalPrice = product.reduce(
+      (acc, el) => acc + Number(el.quantity * el.price),
+      0
+    );
+
+    console.log(totalPrice);
+    document.querySelector("#totalPrice").innerHTML += totalPrice;
+  }
+};
+displayTotalPrice();
+
+const displayTotalQuantity = () => {
+  const storage = localStorage.getItem("articles");
+  if (storage) {
+    const product = JSON.parse(storage);
+    const totalQuantity = product.reduce(
+      (acc, el) => acc + Number(el.quantity),
+      0
+    );
+    document.querySelector("#totalQuantity").innerHTML += totalQuantity;
+  }
+};
+displayTotalQuantity();
+
+// const quantityValue = document.querySelectorAll(".itemQuantity").value;
+// console.log(quantityValue);
+// // for (m=0; m<inputQuantity.length; m++){
+//      inputQuantity.addEventListener('change', updateValue);
+//     function updateValue(e){
+//         quantityValue.texteContent = e.target.value;
+//utiliser getattribute
+//     }
+//  //};
+displayCart();
 //Formulaire - mise en place des RegEX pour vérifier les entrées de l'utilisateur
 let form = document.querySelector(".cart__order__form");
 
@@ -97,14 +126,9 @@ form.lastName.addEventListener("change", function () {
   validName(this);
 });
 
-// const validName = function(inputName){
-//     let nameRegExp = new RegExp( "^([a-zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zàáâäçèéêëìíîïñòóôöùúûü]+)*)+([-]([a-zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zàáâäçèéêëìíîïñòóôöùúûü]+)*)+)*$", "g");
-// }
-// let testName = validName.test(inputName);
-
 const validName = function (inputName) {
   let nameRegExp = new RegExp(
-    "^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$",
+    "^([a-zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zàáâäçèéêëìíîïñòóôöùúûü]+)*)+([-]([a-zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zàáâäçèéêëìíîïñòóôöùúûü]+)*)+)*$",
     "g"
   );
   let testName = nameRegExp.test(inputName);
