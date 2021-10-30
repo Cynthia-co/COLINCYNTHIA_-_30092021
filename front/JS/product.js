@@ -62,7 +62,7 @@ document.querySelector("#addToCart").addEventListener("click", (event) => {
   console.log(articles);
 
   //Envoie des articles au local storage sous forme de tableau
-  let produitLocalStorage = JSON.parse(localStorage.getItem("articles")) || [];
+  let produitLocalStorage = JSON.parse(localStorage.getItem("articles"))||[];
   let found = false;
 
   //Création de la boucle for pour récupérer les articles sans faire de doublons
@@ -72,7 +72,7 @@ document.querySelector("#addToCart").addEventListener("click", (event) => {
       found = true;
       break;
     }
-  }
+  };
 
   if (!found) {
     let article = {
@@ -83,9 +83,11 @@ document.querySelector("#addToCart").addEventListener("click", (event) => {
       price,
       colorsOption,
     };
+
     produitLocalStorage.push(article);
+
     alert("Vos articles ont bien été ajouté au panier!");
   }
-
+  
   localStorage.setItem("articles", JSON.stringify(produitLocalStorage));
 });

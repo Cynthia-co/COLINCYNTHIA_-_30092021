@@ -43,7 +43,7 @@ const displayCart = () => {
         .getElementById("cart__items")
         .insertAdjacentHTML("beforeend", produitPanier);
 
-      inputChange(produitLocalStorage[j].getId);
+      // inputChange(produitLocalStorage[j].getId);
       addDeleteAction(produitLocalStorage[j].getId);
     }
   }
@@ -51,31 +51,38 @@ const displayCart = () => {
 const addDeleteAction = (id) => {
   const deleteItem = document.getElementById(id).querySelector(".deleteItem");
   const item = document.getElementById(id);
-
   deleteItem.addEventListener("click", () => {
     const idItem = item.getAttribute("id");
     const colorItem = item.getAttribute("data-color");
-
     produitLocalStorage = produitLocalStorage.filter(
       (p) => p.getId !== idItem || p.colorsOption !== colorItem
     );
-
     localStorage.setItem("articles", JSON.stringify(produitLocalStorage));
-
     displayCart();
     displayTotalPrice();
     displayTotalQuantity();
   });
 };
 
-
 //Changer la quantité du panier
-const inputChange = (id) => {
-  const input = document.getElementById(id).querySelector(".itemQuantity");
-  input.addEventListener("input", (e) => {
-    console.log(e);
-  });
-};
+// const inputChange = (id) => {
+//   const storage = localStorage.getItem("articles");
+
+//   const input = document.getElementById(id).querySelector(".itemQuantity");
+//   input.addEventListener("input", (e) => {
+//     if (storage) {
+//       const newQuantity = e.data;
+//       console.log(newQuantity);
+//       const product = JSON.parse(storage);
+//        const sameQantity = article.find(event => event.id === id)
+//       localStorage.setItem("articles", JSON.stringify(produitLocalStorage));
+//       document.querySelector(".itemQuantity").textContent += e.data;
+
+//       displayTotalPrice();
+//       displayTotalQuantity();
+//     }
+//   });
+// };
 
 const displayTotalPrice = () => {
   const storage = localStorage.getItem("articles");
@@ -86,8 +93,7 @@ const displayTotalPrice = () => {
       0
     );
 
-    console.log(totalPrice);
-    document.querySelector("#totalPrice").innerHTML += totalPrice;
+    document.querySelector("#totalPrice").innerHTML = totalPrice;
   }
 };
 displayTotalPrice();
@@ -100,21 +106,13 @@ const displayTotalQuantity = () => {
       (acc, el) => acc + Number(el.quantity),
       0
     );
-    document.querySelector("#totalQuantity").innerHTML += totalQuantity;
+    document.querySelector("#totalQuantity").innerHTML = totalQuantity;
   }
 };
 displayTotalQuantity();
 
-// const quantityValue = document.querySelectorAll(".itemQuantity").value;
-// console.log(quantityValue);
-// // for (m=0; m<inputQuantity.length; m++){
-//      inputQuantity.addEventListener('change', updateValue);
-//     function updateValue(e){
-//         quantityValue.texteContent = e.target.value;
-//utiliser getattribute
-//     }
-//  //};
 displayCart();
+
 //Formulaire - mise en place des RegEX pour vérifier les entrées de l'utilisateur
 let form = document.querySelector(".cart__order__form");
 
@@ -127,16 +125,12 @@ form.lastName.addEventListener("change", function () {
 });
 
 const validName = function (inputName) {
-  let nameRegExp = new RegExp(
-    "^([a-zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zàáâäçèéêëìíîïñòóôöùúûü]+)*)+([-]([a-zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zàáâäçèéêëìíîïñòóôöùúûü]+)*)+)*$",
-    "g"
-  );
-  let testName = nameRegExp.test(inputName);
-
+  let nameRegExp = new RegExp("^[a-zA-Z][a-zA-Z .,'-]*$", "g");
+  let testName = nameRegExp.test(inputName.value);
   if (testName) {
-    return true;
+    inputName.nextElementSibling.innerHTML = "Format valide";
   } else {
-    inputName.nextElementSibling.innerHTML = "Format non valide";
+    inputName.nextElementSibling.innerHTML = "Saisissez votre nom";
     return false;
   }
 };
@@ -144,22 +138,32 @@ const validName = function (inputName) {
 form.address.addEventListener("change", function () {
   validAddress(this);
 });
-let validAddress = function (inputAdress) {
-  if (inputAdress.value.length < 5) {
-    inputAdress.nextElementSibling.innerHTML = "Saisissez votre adresse";
-  } else {
+
+const validAddress = function (inputAdress) {
+  let addressRegExp = new RegExp(
+    "^[0-9]{1,3}(?:(?:[,. ]){1}[-a-zA-Zàâäéèêëïîôöùûüç]+)+"
+  );
+  let testAdress = addressRegExp.test(inputAdress.value);
+  if (testAdress) {
+    inputAdress.nextElementSibling.innerHTML = "Format valide";
     return true;
+  } else {
+    inputAdress.nextElementSibling.innerHTML = "Saisissez votre adresse";
+    return false;
   }
 };
 form.city.addEventListener("change", function () {
   validCity(this);
 });
 
-let validCity = function (inputCity) {
-  if (inputCity.value.length < 3) {
-    inputCity.nextElementSibling.innerHTML = "Saisissez votre ville";
+const validCity = function (inputCity) {
+  let cityRegExp = new RegExp ("^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$", "g");
+  let testCity = cityRegExp.test(inputCity.value);
+  if (testCity) {
+    inputCity.nextElementSibling.innerHTML = "Format valide";
   } else {
-    return true;
+    inputCity.nextElementSibling.innerHTML = "Saisissez votre ville";
+    return false;
   }
 };
 
@@ -172,14 +176,15 @@ const validEmail = function (inputEmail) {
     "^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$",
     "g"
   );
-  let testEmail = emailRegExp.test(inputEmail);
+  let testEmail = emailRegExp.test(inputEmail.value);
 
   if (testEmail) {
-    return true;
     inputEmail.nextElementSibling.innerHTML = "Adresse valide";
+    return true;
   } else {
+    inputEmail.nextElementSibling.innerHTML =
+      "Saisissez votre adresse mail complète";
     return false;
-    inputEmail.nextElementSibling.innerHTML = "Adresse NON valide";
   }
 };
 
