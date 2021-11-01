@@ -30,7 +30,7 @@ const displayCart = () => {
        <div class="cart__item__content__settings">
          <div class="cart__item__content__settings__quantity">
            <p>Qté :  </p>
-           <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${produitLocalStorage[j].quantity}">
+           <input type="number" class="itemQuantity" data-id="${produitLocalStorage[j].getId}" name="itemQuantity" min="1" max="100" value="${produitLocalStorage[j].quantity}">
          </div>
          <div class="cart__item__content__settings__delete">
            <p id="deleteItem" class="deleteItem">Supprimer</p>
@@ -43,7 +43,7 @@ const displayCart = () => {
         .getElementById("cart__items")
         .insertAdjacentHTML("beforeend", produitPanier);
 
-      // inputChange(produitLocalStorage[j].getId);
+      inputChange(produitLocalStorage[j].getId);
       addDeleteAction(produitLocalStorage[j].getId);
     }
   }
@@ -65,24 +65,30 @@ const addDeleteAction = (id) => {
 };
 
 //Changer la quantité du panier
-// const inputChange = (id) => {
-//   const storage = localStorage.getItem("articles");
+const inputChange = (id) => {
+   const storage = JSON.parse(localStorage.getItem("articles"));
 
-//   const input = document.getElementById(id).querySelector(".itemQuantity");
-//   input.addEventListener("input", (e) => {
-//     if (storage) {
-//       const newQuantity = e.data;
-//       console.log(newQuantity);
-//       const product = JSON.parse(storage);
-//        const sameQantity = article.find(event => event.id === id)
-//       localStorage.setItem("articles", JSON.stringify(produitLocalStorage));
-//       document.querySelector(".itemQuantity").textContent += e.data;
+   const input = document.getElementById(id).querySelector(".itemQuantity");
+   input.addEventListener("input", (e) => {
+     console.log(e);
+    if (storage) { 
+      const id = e.target.getAttribute("data-id");
+      const newQuantity = e.data;
 
-//       displayTotalPrice();
-//       displayTotalQuantity();
-//     }
-//   });
-// };
+       
+       storage.filter(article => article.getId === id).map(focusArticle => {
+          focusArticle.quantity = newQuantity;
+          return focusArticle;
+        });
+        
+       localStorage.setItem("articles", JSON.stringify(storage));
+     
+
+       displayTotalPrice();
+       displayTotalQuantity();
+     }
+   });
+ };
 
 const displayTotalPrice = () => {
   const storage = localStorage.getItem("articles");
@@ -191,40 +197,52 @@ const validEmail = function (inputEmail) {
 //Bouton d'envoi, soumission du formulaire
 document.querySelector("#order").addEventListener("click", (e) => {
   e.preventDefault();
-  let contact = {
+  let contact = {   
     lastName: form.lastName.value,
     firstName: form.firstName.value,
     address: form.address.value,
     city: form.city.value,
     email: form.email.value,
   };
-  let command = {
-    getId,
+
+  const id = document.getElementById('id');
+  const totalPrice= document.getElementById('totalPrice');
+
+  const command = {
+    id, 
     totalPrice,
     contact,
   };
+ console.log(contact);
 
-  if (
-    validName(form.name) &&
-    validAdress(form.address) &&
-    validCity(form.city) &&
-    validEmail(form.Email)
-  ) {
-    localStorage.setItem(command);
-  }
-
+ let commandStorage = JSON.parse(localStorage.getItem("contact"))||[];
+ commandStorage.push(contact);
+ commandStorage.push(command),
+  // if (
+  //   validName(form.name) &&
+  //   validAdress(form.address) &&
+  //   validCity(form.city) &&
+  //   validEmail(form.Email)
+  // ) {
+    localStorage.setItem("commandStorage", JSON.stringify(commandStorage));
+  //};
+console.log(commandStorage);
   //Requête POST
   //Déclaration des variables
-  const promise1 = fetch("http://localhost:3000/api/orders", {
-    method: "POST",
-    body: JSON.stringify(command),
+  let sendCommand = ()=>{ fetch("http://localhost:3000/api/order", {
+
+    method: "POST",  
     headers: {
+      "Accept": "application/json",
       "Content-type": "application/JSON",
     },
-  });
+    body: JSON.stringify(commandStorage),
+  })
+}});
 
-  //Fonction envoi dans l'API
-  promise1.then((response) => {
-    const orderCommand = response.json;
-  });
-});
+//   //Fonction envoi dans l'API
+//   promise1.then((response) => {
+//     const orderCommand = response.json;
+//   });
+// });
+//sendCommand();
