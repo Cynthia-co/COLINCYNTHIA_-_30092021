@@ -30,7 +30,7 @@ const displayCart = () => {
        <div class="cart__item__content__settings">
          <div class="cart__item__content__settings__quantity">
            <p>Qté :  </p>
-           <input type="number" class="itemQuantity" data-id="${produitLocalStorage[j].getId}" name="itemQuantity" min="1" max="100" value="${produitLocalStorage[j].quantity}">
+           <input type="number" class="itemQuantity" data-id="${produitLocalStorage[j].getId}" name="itemQuantity" min="1" max="100" pattern="[0-9]+" value="${produitLocalStorage[j].quantity}">
          </div>
          <div class="cart__item__content__settings__delete">
            <p id="deleteItem" class="deleteItem">Supprimer</p>
@@ -66,29 +66,29 @@ const addDeleteAction = (id) => {
 
 //Changer la quantité du panier
 const inputChange = (id) => {
-   const storage = JSON.parse(localStorage.getItem("articles"));
+  const storage = JSON.parse(localStorage.getItem("articles"));
 
-   const input = document.getElementById(id).querySelector(".itemQuantity");
-   input.addEventListener("input", (e) => {
-     console.log(e);
-    if (storage) { 
+  const input = document.getElementById(id).querySelector(".itemQuantity");
+  input.addEventListener("input", (e) => {
+    if (storage) {
       const id = e.target.getAttribute("data-id");
       const newQuantity = e.data;
 
-       
-       storage.filter(article => article.getId === id).map(focusArticle => {
+      storage
+        .filter((article) => article.getId === id)
+        .map((focusArticle) => {
           focusArticle.quantity = newQuantity;
           return focusArticle;
         });
-        
-       localStorage.setItem("articles", JSON.stringify(storage));
-     
 
-       displayTotalPrice();
-       displayTotalQuantity();
-     }
-   });
- };
+      localStorage.setItem("articles", JSON.stringify(storage));
+
+      displayTotalPrice();
+      displayTotalQuantity();
+    }
+    // window.location.reload();
+  });
+};
 
 const displayTotalPrice = () => {
   const storage = localStorage.getItem("articles");
@@ -134,7 +134,7 @@ const validName = function (inputName) {
   let nameRegExp = new RegExp("^[a-zA-Z][a-zA-Z .,'-]*$", "g");
   let testName = nameRegExp.test(inputName.value);
   if (testName) {
-    inputName.nextElementSibling.innerHTML = "Format valide";
+    return true;
   } else {
     inputName.nextElementSibling.innerHTML = "Saisissez votre nom";
     return false;
@@ -151,7 +151,6 @@ const validAddress = function (inputAdress) {
   );
   let testAdress = addressRegExp.test(inputAdress.value);
   if (testAdress) {
-    inputAdress.nextElementSibling.innerHTML = "Format valide";
     return true;
   } else {
     inputAdress.nextElementSibling.innerHTML = "Saisissez votre adresse";
@@ -163,10 +162,13 @@ form.city.addEventListener("change", function () {
 });
 
 const validCity = function (inputCity) {
-  let cityRegExp = new RegExp ("^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$", "g");
+  let cityRegExp = new RegExp(
+    "^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$",
+    "g"
+  );
   let testCity = cityRegExp.test(inputCity.value);
   if (testCity) {
-    inputCity.nextElementSibling.innerHTML = "Format valide";
+    return true;
   } else {
     inputCity.nextElementSibling.innerHTML = "Saisissez votre ville";
     return false;
@@ -185,7 +187,6 @@ const validEmail = function (inputEmail) {
   let testEmail = emailRegExp.test(inputEmail.value);
 
   if (testEmail) {
-    inputEmail.nextElementSibling.innerHTML = "Adresse valide";
     return true;
   } else {
     inputEmail.nextElementSibling.innerHTML =
@@ -195,54 +196,67 @@ const validEmail = function (inputEmail) {
 };
 
 //Bouton d'envoi, soumission du formulaire
-document.querySelector("#order").addEventListener("click", (e) => {
-  e.preventDefault();
-  let contact = {   
-    lastName: form.lastName.value,
-    firstName: form.firstName.value,
-    address: form.address.value,
-    city: form.city.value,
-    email: form.email.value,
-  };
+const sendCommand = () => {
+  document.querySelector("#order").addEventListener("click", (e) => {
+    e.preventDefault();
+    let contact = {
+      lastName: form.lastName.value,
+      firstName: form.firstName.value,
+      address: form.address.value,
+      city: form.city.value,
+      email: form.email.value,
+    };
 
-  const id = document.getElementById('id');
-  const totalPrice= document.getElementById('totalPrice');
+    const storage = JSON.parse(localStorage.getItem("articles"));
+   
+    const products = [];
+    for (k=0; k<storage.length; k++){
+      let allId = storage[k].getId;
+      products.push(allId);
+    };
 
-  const command = {
-    id, 
-    totalPrice,
-    contact,
-  };
- console.log(contact);
+    let commandOrder = {
+      contact, 
+      products
+    };
 
- let commandStorage = JSON.parse(localStorage.getItem("contact"))||[];
- commandStorage.push(contact);
- commandStorage.push(command),
-  // if (
-  //   validName(form.name) &&
-  //   validAdress(form.address) &&
-  //   validCity(form.city) &&
-  //   validEmail(form.Email)
-  // ) {
-    localStorage.setItem("commandStorage", JSON.stringify(commandStorage));
-  //};
-console.log(commandStorage);
-  //Requête POST
-  //Déclaration des variables
-  let sendCommand = ()=>{ fetch("http://localhost:3000/api/order", {
+    //let commandStorage = JSON.parse(localStorage.getItem("commandOrder"));
+    // commandStorage.push(contact);
+    // commandStorage.push(products);
+    
+      //if(
+      //    validName(form.name) &&
+      //    validAdress(form.address) &&
+      //    validCity(form.city) &&
+      //    validEmail(form.Email)
+      //  ){
+      localStorage.setItem("commandOrder", JSON.stringify(commandOrder));
+    // }else{
+    //   alert('Remplissez correctement le formulaire!')
+    // };
+    console.log(commandOrder);
+    //Requête POST
+    
+    const orderCommand = () => {
+      fetch(
+        "http://localhost:3000/api/products/order",
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-type": "application/JSON",
+          },
+          body: JSON.stringify(commandOrder),
+        })
+        .then((data) => data.json())
+        .then((data) =>{
+         
+          console.log(data);
+        }
+      );
+    };
+    orderCommand();
+  });
+};
 
-    method: "POST",  
-    headers: {
-      "Accept": "application/json",
-      "Content-type": "application/JSON",
-    },
-    body: JSON.stringify(commandStorage),
-  })
-}});
-
-//   //Fonction envoi dans l'API
-//   promise1.then((response) => {
-//     const orderCommand = response.json;
-//   });
-// });
-//sendCommand();
+sendCommand();
