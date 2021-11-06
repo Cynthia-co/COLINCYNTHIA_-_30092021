@@ -252,6 +252,12 @@ const sendCommand = () => {
         .then((data) =>{
          
           console.log(data);
+          console.log(data.orderId);
+          const orderId = data.orderId;
+          localStorage.setItem("orderId", orderId);
+          
+         window.location.href = "confirmation.html" + "?" + "name" + "=" + orderId;
+         localStorage.clear();
         }
       );
     };
