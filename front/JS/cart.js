@@ -72,8 +72,9 @@ const inputChange = (id) => {
   input.addEventListener("input", (e) => {
     if (storage) {
       const id = e.target.getAttribute("data-id");
-      const newQuantity = e.data;
-
+      const newQuantity = e.target.value;
+      console.log(e.target.value);
+      console.log(e);
       storage
         .filter((article) => article.getId === id)
         .map((focusArticle) => {
@@ -194,75 +195,66 @@ const validEmail = function (inputEmail) {
     return false;
   }
 };
-
+//Requête POST pour envoyer les données à l'API et récupérer le numéro de commande
+const orderCommand = (commandOrder) => {
+  fetch("http://localhost:3000/api/products/order", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-type": "application/JSON",
+    },
+    body: JSON.stringify(commandOrder),
+  })
+    .then((data) => data.json())
+    .then((data) => {
+      console.log(data);
+      console.log(data.orderId);
+      const orderId = data.orderId;
+      localStorage.setItem("orderId", orderId);
+console.log('hello');
+      window.location.href = "confirmation.html" + "?" + "name" + "=" + orderId;
+      localStorage.clear();
+    });
+};
 //Bouton d'envoi, soumission du formulaire
 const sendCommand = () => {
   document.querySelector("#order").addEventListener("click", (e) => {
     e.preventDefault();
-    let contact = {
-      lastName: form.lastName.value,
-      firstName: form.firstName.value,
-      address: form.address.value,
-      city: form.city.value,
-      email: form.email.value,
-    };
+    if (
+      validName(form.name) &&
+      validAddress(form.address) &&
+      validCity(form.city) &&
+      validEmail(form.email)
+    ) {
+      const contact = {
+        lastName: form.lastName.value,
+        firstName: form.firstName.value,
+        address: form.address.value,
+        city: form.city.value,
+        email: form.email.value,
+      };
+console.log('Bonjour');
+      const storage = JSON.parse(localStorage.getItem("articles"));
 
-    const storage = JSON.parse(localStorage.getItem("articles"));
-   
-    const products = [];
-    for (k=0; k<storage.length; k++){
-      let allId = storage[k].getId;
-      products.push(allId);
-    };
+      const products = [];
+      for (k = 0; k < storage.length; k++) {
+        let allId = storage[k].getId;
+        products.push(allId);
+      }
 
-    let commandOrder = {
-      contact, 
-      products
-    };
-
-    //let commandStorage = JSON.parse(localStorage.getItem("commandOrder"));
-    // commandStorage.push(contact);
-    // commandStorage.push(products);
-    
-      //if(
-      //    validName(form.name) &&
-      //    validAdress(form.address) &&
-      //    validCity(form.city) &&
-      //    validEmail(form.Email)
-      //  ){
+      let commandOrder = {
+        contact,
+        products,
+      };
+      console.log('Bonjour2');
       localStorage.setItem("commandOrder", JSON.stringify(commandOrder));
-    // }else{
-    //   alert('Remplissez correctement le formulaire!')
-    // };
-    console.log(commandOrder);
-    //Requête POST
+
+      orderCommand(commandOrder);
+      console.log('Bonjour3');
     
-    const orderCommand = () => {
-      fetch(
-        "http://localhost:3000/api/products/order",
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-type": "application/JSON",
-          },
-          body: JSON.stringify(commandOrder),
-        })
-        .then((data) => data.json())
-        .then((data) =>{
-         
-          console.log(data);
-          console.log(data.orderId);
-          const orderId = data.orderId;
-          localStorage.setItem("orderId", orderId);
-          
-         window.location.href = "confirmation.html" + "?" + "name" + "=" + orderId;
-         localStorage.clear();
-        }
-      );
-    };
-    orderCommand();
+    } else {
+      alert("Remplissez correctement le formulaire!");
+    }
   });
 };
-
 sendCommand();
