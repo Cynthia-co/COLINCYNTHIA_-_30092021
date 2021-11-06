@@ -1,6 +1,7 @@
 //Récupération du numéro de commande en passant par l'URL
+//Déclaration de la constante url
 const urlConfirm = new URL(window.location.href);
-console.log(urlConfirm);
+//Fonction pour récupérer l'orderId de l'url
 const getOrderId = () => {
     console.log(urlConfirm);
     const params = urlConfirm.searchParams;

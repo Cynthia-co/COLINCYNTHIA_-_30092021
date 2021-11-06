@@ -5,19 +5,22 @@ let produitLocalStorage = JSON.parse(localStorage.getItem("articles"));
 
 //Déclaration de la fonction pour l'affichage
 const displayCart = () => {
-  //Affichage des éléments du local storage
+  //Affichage des éléments du local storage après avoir vérifier qu'il n'est pas vide
   if (produitLocalStorage.length === 0) {
     document.getElementById(
       "cart__items"
     ).innerHTML = `<p>Le panier est vide<p>`;
   } else {
     document.getElementById("cart__items").innerHTML = "";
+    //Boucle for pour récupérer les éléments de chaque produit du localStorage
     for (j = 0; j < produitLocalStorage.length; j++) {
+      //Convertir les données string en number pour pouvoir les manipuler
       const priceUnit = Number(produitLocalStorage[j].price);
       const quantityUnit = Number(produitLocalStorage[j].quantity);
+      //Calcul du prix de chaque produit
       const partielPrice = priceUnit * quantityUnit;
 
-      //Déclaration de l'article du panier
+      //Déclaration et affichage de chaque article du panier
       const produitPanier = `<article class="cart__item" id="${produitLocalStorage[j].getId}" data-color=${produitLocalStorage[j].colorsOption}>
      <div class="cart__item__img">
        <img src="${produitLocalStorage[j].imageUrl}" alt="Photographie d'un canapé">
@@ -43,11 +46,14 @@ const displayCart = () => {
         .getElementById("cart__items")
         .insertAdjacentHTML("beforeend", produitPanier);
 
+      //Appel des fonctions pour modifier les quantités et supprimer les articles
       inputChange(produitLocalStorage[j].getId);
       addDeleteAction(produitLocalStorage[j].getId);
     }
   }
 };
+
+//Déclaration et création de fonction suppression de l'article au click du bouton "Supprimer"
 const addDeleteAction = (id) => {
   const deleteItem = document.getElementById(id).querySelector(".deleteItem");
   const item = document.getElementById(id);
@@ -64,7 +70,7 @@ const addDeleteAction = (id) => {
   });
 };
 
-//Changer la quantité du panier
+//Changer la quantité du panier par l'utilisateur
 const inputChange = (id) => {
   const storage = JSON.parse(localStorage.getItem("articles"));
 
@@ -87,10 +93,11 @@ const inputChange = (id) => {
       displayTotalPrice();
       displayTotalQuantity();
     }
-    // window.location.reload();
+    window.location.reload();
   });
 };
 
+//Calcul du prix total du panier
 const displayTotalPrice = () => {
   const storage = localStorage.getItem("articles");
   if (storage) {
@@ -105,6 +112,7 @@ const displayTotalPrice = () => {
 };
 displayTotalPrice();
 
+//Calcul du nombre total d'articles
 const displayTotalQuantity = () => {
   const storage = localStorage.getItem("articles");
   if (storage) {
@@ -211,12 +219,13 @@ const orderCommand = (commandOrder) => {
       console.log(data.orderId);
       const orderId = data.orderId;
       localStorage.setItem("orderId", orderId);
-console.log('hello');
+
+      //Envoi de l'utilisateur vers la page de confirmation en supprimant le localStorage
       window.location.href = "confirmation.html" + "?" + "name" + "=" + orderId;
       localStorage.clear();
     });
 };
-//Bouton d'envoi, soumission du formulaire
+//Soumission du formulaire et envoi de la commande
 const sendCommand = () => {
   document.querySelector("#order").addEventListener("click", (e) => {
     e.preventDefault();
@@ -233,7 +242,7 @@ const sendCommand = () => {
         city: form.city.value,
         email: form.email.value,
       };
-console.log('Bonjour');
+
       const storage = JSON.parse(localStorage.getItem("articles"));
 
       const products = [];
@@ -246,12 +255,10 @@ console.log('Bonjour');
         contact,
         products,
       };
-      console.log('Bonjour2');
+
       localStorage.setItem("commandOrder", JSON.stringify(commandOrder));
 
       orderCommand(commandOrder);
-      console.log('Bonjour3');
-    
     } else {
       alert("Remplissez correctement le formulaire!");
     }
