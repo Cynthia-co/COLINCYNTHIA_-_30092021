@@ -17,7 +17,7 @@ function getProduct(getId) {
       let imageUrl = data.imageUrl;
       let altTxt = data.altTxt;
       let colors = data.colors;
-      let price = data.price / 10;
+      let price = data.price;
       let id = data._id;
 
       let image = `<img src="${imageUrl}" alt="${altTxt}" id="imageKanap"/>`;

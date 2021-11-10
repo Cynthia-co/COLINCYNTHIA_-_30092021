@@ -13,7 +13,7 @@ function getProducts() {
           let description = data[i].description;
           let imageUrl = data[i].imageUrl;
           let altTxt = data[i].altTxt;
-          let price = data[i].price / 10;
+          let price = data[i].price;
           let id = data[i]._id;
 
           let items = `<a href="../html/product.html?id=${id}">

@@ -166,6 +166,7 @@ const validAddress = function (inputAdress) {
     return false;
   }
 };
+
 form.city.addEventListener("change", function () {
   validCity(this);
 });
@@ -203,6 +204,7 @@ const validEmail = function (inputEmail) {
     return false;
   }
 };
+
 //Requête POST pour envoyer les données à l'API et récupérer le numéro de commande
 const orderCommand = (commandOrder) => {
   fetch("http://localhost:3000/api/products/order", {
@@ -218,7 +220,7 @@ const orderCommand = (commandOrder) => {
       console.log(data);
       console.log(data.orderId);
       const orderId = data.orderId;
-      localStorage.setItem("orderId", orderId);
+     
 
       //Envoi de l'utilisateur vers la page de confirmation en supprimant le localStorage
       window.location.href = "confirmation.html" + "?" + "name" + "=" + orderId;
