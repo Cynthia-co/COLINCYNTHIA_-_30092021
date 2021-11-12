@@ -47,7 +47,7 @@ const displayCart = () => {
         .insertAdjacentHTML("beforeend", produitPanier);
 
       //Appel des fonctions pour modifier les quantités et supprimer les articles
-      inputChange(produitLocalStorage[j].getId);
+    //  inputChange(produitLocalStorage[j].getId);
       addDeleteAction(produitLocalStorage[j].getId);
     }
   }
@@ -71,35 +71,55 @@ const addDeleteAction = (id) => {
 };
 
 //Changer la quantité du panier par l'utilisateur
-const inputChange = (id) => {
-  const storage = JSON.parse(localStorage.getItem("articles"));
-  const input = document.getElementById(id).querySelector(".itemQuantity");
-  console.log("bonjour");
-  input.addEventListener("input", (event) => {
-    console.log("bonjour2");
-    console.log(event);
+let input = document.querySelector('#cart__items')
 
-    if (storage) {
-      const id = event.target.getAttribute("data-id");
-      const newQuantity = event.target.value;
-      const color = document.getElementById(id).getAttribute("data-color");
+input.addEventListener('input', (event) => {
+  const id = event.target.getAttribute("data-id");
+  const color = event.target.closest('.cart__item').getAttribute("data-color")
+  const newQuantity = event.target.value;
+  console.log(id)
+  console.log(color)
 
-      storage
-        .filter(
-          (article) => article.getId === id && article.colorsOption === color
-        )
-        .map((focusArticle) => {
-          focusArticle.quantity = newQuantity;
-          return focusArticle;
-        });
-
-      localStorage.setItem("articles", JSON.stringify(storage));
-      displayTotalPrice();
-      displayTotalQuantity();
+  for(let i = 0; i < produitLocalStorage.length; i++){
+     if(produitLocalStorage[i].getId === id && produitLocalStorage[i].colorsOption === color){
+        produitLocalStorage[i].quantity = newQuantity
+        console.log(produitLocalStorage[i].quantity)
+        localStorage.setItem("articles", JSON.stringify(produitLocalStorage));
+        displayTotalPrice();
+        displayTotalQuantity();
+        displayCart();
+      }
     }
-    window.location.reload();
-  });
-};
+})
+// const inputChange = (id) => {
+//   const storage =JSON.parse(localStorage.getItem("articles"));
+//  const inputQuantity = document.getElementById(id).querySelector(".itemQuantity");
+// //   console.log('bonjour');
+//   inputQuantity.addEventListener('input', (event) => {
+ 
+//     console.log(event);
+    
+//      if (storage) {
+//          const id = event.target.getAttribute("data-id");
+//          const newQuantity = event.target.value;
+//         const color = document.getElementById(id).getAttribute('data-color');
+  
+//         storage
+//            .filter((article) => article.getId === id && article.colorsOption === color)
+//            .map((focusArticle) => {
+//              focusArticle.quantity = newQuantity;
+//              return focusArticle;
+//            });
+  
+//     localStorage.setItem("articles", JSON.stringify(storage));
+//       displayTotalPrice();
+//       displayTotalQuantity();
+//        }
+//    window.location.reload();
+// })
+// };
+
+
 
 //Calcul du prix total du panier
 const displayTotalPrice = () => {
