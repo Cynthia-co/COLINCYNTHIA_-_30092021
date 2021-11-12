@@ -75,12 +75,17 @@ const inputChange = (id) => {
   const storage = JSON.parse(localStorage.getItem("articles"));
 
   const input = document.getElementById(id).querySelector(".itemQuantity");
+  console.log('bon3');
   input.addEventListener("input", (e) => {
+    console.log('a');
     if (storage) {
+     
       const id = e.target.getAttribute("data-id");
       const newQuantity = e.target.value;
-      console.log(e.target.value);
-      console.log(e);
+     // let arrayPath = e.composedPath();
+      // let color = arrayPath[4].getAttribute("data-color");
+
+console.log('bon');
       storage
         .filter((article) => article.getId === id)
         .map((focusArticle) => {
@@ -96,6 +101,7 @@ const inputChange = (id) => {
     window.location.reload();
   });
 };
+
 
 //Calcul du prix total du panier
 const displayTotalPrice = () => {
@@ -131,26 +137,37 @@ displayCart();
 //Formulaire - mise en place des RegEX pour vérifier les entrées de l'utilisateur
 let form = document.querySelector(".cart__order__form");
 
-form.firstName.addEventListener("change", function () {
-  validName(this);
+form.firstName.addEventListener("input", function () {
+  validFirstName(this);
 });
-
-form.lastName.addEventListener("change", function () {
-  validName(this);
-});
-
-const validName = function (inputName) {
+const validFirstName = function (inputFirstName) {
   let nameRegExp = new RegExp("^[a-zA-Z][a-zA-Z .,'-]*$", "g");
-  let testName = nameRegExp.test(inputName.value);
-  if (testName) {
+  let testFirstName = nameRegExp.test(inputFirstName.value);
+  if (testFirstName) {
+    inputFirstName.nextElementSibling.innerHTML = "";
     return true;
   } else {
-    inputName.nextElementSibling.innerHTML = "Saisissez votre nom";
+    inputFirstName.nextElementSibling.innerHTML = "Saisissez votre prénom";
+    return false;
+  }
+};
+form.lastName.addEventListener("input", function () {
+  validLastName(this);
+});
+
+const validLastName = function (inputLastName) {
+  let nameRegExp = new RegExp("^[a-zA-Z][a-zA-Z .,'-]*$", "g");
+  let testLastName = nameRegExp.test(inputLastName.value);
+  if (testLastName) {
+    inputLastName.nextElementSibling.innerHTML = "";
+    return true;
+  } else {
+    inputLastName.nextElementSibling.innerHTML = "Saisissez votre nom";
     return false;
   }
 };
 
-form.address.addEventListener("change", function () {
+form.address.addEventListener("input", function () {
   validAddress(this);
 });
 
@@ -160,6 +177,7 @@ const validAddress = function (inputAdress) {
   );
   let testAdress = addressRegExp.test(inputAdress.value);
   if (testAdress) {
+    inputAdress.nextElementSibling.innerHTML = "";
     return true;
   } else {
     inputAdress.nextElementSibling.innerHTML = "Saisissez votre adresse";
@@ -167,7 +185,7 @@ const validAddress = function (inputAdress) {
   }
 };
 
-form.city.addEventListener("change", function () {
+form.city.addEventListener("input", function () {
   validCity(this);
 });
 
@@ -178,6 +196,7 @@ const validCity = function (inputCity) {
   );
   let testCity = cityRegExp.test(inputCity.value);
   if (testCity) {
+    inputCity.nextElementSibling.innerHTML = "";
     return true;
   } else {
     inputCity.nextElementSibling.innerHTML = "Saisissez votre ville";
@@ -185,7 +204,7 @@ const validCity = function (inputCity) {
   }
 };
 
-form.email.addEventListener("change", function () {
+form.email.addEventListener("input", function () {
   validEmail(this);
 });
 
@@ -197,6 +216,7 @@ const validEmail = function (inputEmail) {
   let testEmail = emailRegExp.test(inputEmail.value);
 
   if (testEmail) {
+    inputEmail.nextElementSibling.innerHTML ="";
     return true;
   } else {
     inputEmail.nextElementSibling.innerHTML =

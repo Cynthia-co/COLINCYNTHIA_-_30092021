@@ -6,7 +6,7 @@ function getProducts() {
   fetch(url).then((data) =>
     data
       .json()
-      //.then((data)=> console.log(data)));
+      
       .then((data) => {
         for (let i = 0; i < data.length; i++) {
           let name = data[i].name;

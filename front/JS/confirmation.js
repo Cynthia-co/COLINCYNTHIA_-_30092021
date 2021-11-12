@@ -2,11 +2,9 @@
 //Déclaration de la constante url
 const urlConfirm = new URL(window.location.href);
 //Fonction pour récupérer l'orderId de l'url
-const getOrderId = () => {
-    console.log(urlConfirm);
+const getOrderId = () => {  
     const params = urlConfirm.searchParams;
     const orderConfirm =params.get('name');
-    console.log(orderConfirm);
     document.getElementById('orderId').innerHTML = orderConfirm;
 };
 getOrderId();

@@ -59,7 +59,7 @@ document.querySelector("#addToCart").addEventListener("click", (event) => {
     price,
     colorsOption,
   };
-  console.log(articles);
+  
 
   //Envoie des articles au local storage sous forme de tableau
   let produitLocalStorage = JSON.parse(localStorage.getItem("articles"))||[];
