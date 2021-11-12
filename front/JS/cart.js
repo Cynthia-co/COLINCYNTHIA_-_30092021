@@ -73,35 +73,33 @@ const addDeleteAction = (id) => {
 //Changer la quantité du panier par l'utilisateur
 const inputChange = (id) => {
   const storage = JSON.parse(localStorage.getItem("articles"));
-
   const input = document.getElementById(id).querySelector(".itemQuantity");
-  console.log('bon3');
-  input.addEventListener("input", (e) => {
-    console.log('a');
-    if (storage) {
-     
-      const id = e.target.getAttribute("data-id");
-      const newQuantity = e.target.value;
-     // let arrayPath = e.composedPath();
-      // let color = arrayPath[4].getAttribute("data-color");
+  console.log("bonjour");
+  input.addEventListener("input", (event) => {
+    console.log("bonjour2");
+    console.log(event);
 
-console.log('bon');
+    if (storage) {
+      const id = event.target.getAttribute("data-id");
+      const newQuantity = event.target.value;
+      const color = document.getElementById(id).getAttribute("data-color");
+
       storage
-        .filter((article) => article.getId === id)
+        .filter(
+          (article) => article.getId === id && article.colorsOption === color
+        )
         .map((focusArticle) => {
           focusArticle.quantity = newQuantity;
           return focusArticle;
         });
 
       localStorage.setItem("articles", JSON.stringify(storage));
-
       displayTotalPrice();
       displayTotalQuantity();
     }
     window.location.reload();
   });
 };
-
 
 //Calcul du prix total du panier
 const displayTotalPrice = () => {
@@ -216,7 +214,7 @@ const validEmail = function (inputEmail) {
   let testEmail = emailRegExp.test(inputEmail.value);
 
   if (testEmail) {
-    inputEmail.nextElementSibling.innerHTML ="";
+    inputEmail.nextElementSibling.innerHTML = "";
     return true;
   } else {
     inputEmail.nextElementSibling.innerHTML =
@@ -240,7 +238,6 @@ const orderCommand = (commandOrder) => {
       console.log(data);
       console.log(data.orderId);
       const orderId = data.orderId;
-     
 
       //Envoi de l'utilisateur vers la page de confirmation en supprimant le localStorage
       window.location.href = "confirmation.html" + "?" + "name" + "=" + orderId;
@@ -252,7 +249,8 @@ const sendCommand = () => {
   document.querySelector("#order").addEventListener("click", (e) => {
     e.preventDefault();
     if (
-      validName(form.name) &&
+      validFirstName(form.firstName) &&
+      validLastName(form.lastName) &&
       validAddress(form.address) &&
       validCity(form.city) &&
       validEmail(form.email)
