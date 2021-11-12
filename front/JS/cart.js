@@ -47,7 +47,6 @@ const displayCart = () => {
         .insertAdjacentHTML("beforeend", produitPanier);
 
       //Appel des fonctions pour modifier les quantités et supprimer les articles
-    //  inputChange(produitLocalStorage[j].getId);
       addDeleteAction(produitLocalStorage[j].getId);
     }
   }
@@ -77,8 +76,6 @@ input.addEventListener('input', (event) => {
   const id = event.target.getAttribute("data-id");
   const color = event.target.closest('.cart__item').getAttribute("data-color")
   const newQuantity = event.target.value;
-  console.log(id)
-  console.log(color)
 
   for(let i = 0; i < produitLocalStorage.length; i++){
      if(produitLocalStorage[i].getId === id && produitLocalStorage[i].colorsOption === color){
@@ -91,35 +88,6 @@ input.addEventListener('input', (event) => {
       }
     }
 })
-// const inputChange = (id) => {
-//   const storage =JSON.parse(localStorage.getItem("articles"));
-//  const inputQuantity = document.getElementById(id).querySelector(".itemQuantity");
-// //   console.log('bonjour');
-//   inputQuantity.addEventListener('input', (event) => {
- 
-//     console.log(event);
-    
-//      if (storage) {
-//          const id = event.target.getAttribute("data-id");
-//          const newQuantity = event.target.value;
-//         const color = document.getElementById(id).getAttribute('data-color');
-  
-//         storage
-//            .filter((article) => article.getId === id && article.colorsOption === color)
-//            .map((focusArticle) => {
-//              focusArticle.quantity = newQuantity;
-//              return focusArticle;
-//            });
-  
-//     localStorage.setItem("articles", JSON.stringify(storage));
-//       displayTotalPrice();
-//       displayTotalQuantity();
-//        }
-//    window.location.reload();
-// })
-// };
-
-
 
 //Calcul du prix total du panier
 const displayTotalPrice = () => {
@@ -169,6 +137,7 @@ const validFirstName = function (inputFirstName) {
     return false;
   }
 };
+
 form.lastName.addEventListener("input", function () {
   validLastName(this);
 });
